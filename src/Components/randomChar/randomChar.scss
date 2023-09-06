@@ -1,0 +1,97 @@
+@import '../../sass/base/function.scss';
+
+.random-char {
+    margin-top: 50px;
+    // display: flex;
+    // flex-wrap: wrap;
+    // box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.25);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 550px); //repeat(2, 550px);
+    align-items: center;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+
+    .block {
+        // flex: 1 1 50%;
+        height: 250px;
+        padding: 35px 35px 35px 40px;
+        display: flex;
+        justify-content: flex-start;
+        column-gap: 30px;
+
+        &__image {
+            flex: 0 0 auto;
+            width: 180px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: 0.2s;
+            }
+        }
+
+        &__descr {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        &__title {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: lh(22, 29);
+        }
+
+        &__text {
+            padding-top: 10px;
+            flex: 1 0 auto;
+            line-height: lh(14, 18);
+            // overflow: hidden;
+            // text-overflow: ellipsis;
+            // display: -webkit-box;
+            // -webkit-line-clamp: 5;
+            // -webkit-box-orient: vertical;
+        }
+
+        &__button {
+            padding-top: 13px;
+            display: flex;
+            justify-content: flex-start;
+            column-gap: 30px;
+        }
+    }
+
+    .cta-block {
+        // flex: 1 1 50%;
+        height: 250px;
+        padding: 35px 35px 35px 40px;
+        display: flex;
+        flex-direction: column;
+        background-color: #232222;
+        background-image: url('../../resources/img/mjolnir.png'), url('../../resources/img/shield.png');
+        background-repeat: no-repeat;
+        background-position: bottom 14px right -35px, bottom 14px right 67px;
+        background-size: 189px 189px, 100px 100px;
+        box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.25);
+
+        &__text {
+            flex: 1 0 auto;
+            color: #FFF;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: lh(24, 32);
+
+            div:last-child {
+                margin-top: 33px;
+            }
+        }
+
+    }
+
+}

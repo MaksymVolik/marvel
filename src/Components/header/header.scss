@@ -1,0 +1,41 @@
+@import '../../sass/base/function.scss';
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__title {
+        flex: 1 1 50%;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: lh(28, 37);
+
+        .main-color {
+            color: var(--main-color);
+        }
+    }
+
+    &__menu {
+        ul {
+            flex: 1 1 50%;
+            display: flex;
+            justify-content: flex-end;
+            column-gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: lh(24, 32);
+
+            li {
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        cursor: pointer;
+                        color: var(--main-color)
+                    }
+                }
+            }
+
+
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@use "sass:math";
+
+//TO %
+@function prc($pxOne, $pxTwo) {
+    $result: math.percentage(math.div($pxOne, $pxTwo)); //math.div($pxOne, $pxTwo) * 100%;
+    @return $result;
+}
+
+//REM
+@function rem($px) {
+    $result: math.div($px, 16)+rem;
+    @return $result;
+}
+
+//EM
+@function em($px) {
+    $result: math.div($px, 16)+em;
+    @return $result;
+}
+
+//line-height: Unitless values: use this number multiplied by the element's font size
+@function lh($pxFZ, $pxLH) {
+    $result: math.div($pxLH, $pxFZ);
+    @return $result;
+}

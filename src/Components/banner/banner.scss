@@ -1,0 +1,20 @@
+@import '../../sass/base/function.scss';
+
+.banner {
+    min-height: 100px;
+    padding: 18px 0;
+    background-color: #232222;
+    background-image: url('../../resources/img/Avengers.png'), url('../../resources/img/Avengers\ logo.png');
+    background-repeat: no-repeat;
+    background-position: center left 45px, center right 25px;
+    background-size: auto auto, auto auto;
+
+
+    &__text {
+        padding-left: 280px;
+        color: #FFF;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: lh(24, 32);
+    }
+}

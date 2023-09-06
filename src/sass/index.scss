@@ -1,0 +1,40 @@
+@import './base/variables.scss';
+
+@import './libs/resets';
+
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:regular,700);
+// @import 'sass/libs/font.scss';
+
+:root {
+    --main-color: #9F0013;
+}
+
+.container {
+    width: $maxWidthContainer + px;
+    margin: 0 auto;
+}
+
+main {
+    margin-top: 50px;
+    position: relative;
+}
+
+@import 'blocks/button';
+
+.pulse {
+    animation: pulse 1.5s ease-in-out .5s infinite
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: .4
+    }
+
+    100% {
+        opacity: 1
+    }
+}

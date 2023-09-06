@@ -1,0 +1,22 @@
+.App {
+    padding: 50px 0 50px 0;
+    position: relative;
+
+    .bg-decoration {
+        position: absolute;
+        right: -174px;
+        bottom: -70px;
+        z-index: -1;
+    }
+
+    &__page {
+        margin-top: 45px;
+        display: flex;
+        align-items: flex-start;
+        column-gap: 25px;
+    }
+
+    &__descr {
+        flex: 1 1 425px;
+    }
+}

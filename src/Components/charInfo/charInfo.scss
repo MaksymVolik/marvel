@@ -1,0 +1,73 @@
+@import '../../sass/base/function.scss';
+
+.char-info {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
+
+    &__character {
+        display: flex;
+        justify-content: flex-start;
+        column-gap: 25px;
+    }
+
+    &__image {
+        flex: 0 0 auto;
+        width: 150px;
+        height: 150px;
+        position: relative;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.2s;
+        }
+    }
+
+    &__wraper {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        row-gap: 10px;
+    }
+
+    &__title {
+        flex: 1 0 auto;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: lh(22, 27);
+    }
+
+    &__descr {
+        line-height: lh(14, 18);
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: lh(18, 24);
+        padding-bottom: 10px;
+    }
+
+    &__list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+
+
+    &__comic-book-title {
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        padding: 0 10px;
+        line-height: lh(14, 18);
+    }
+}

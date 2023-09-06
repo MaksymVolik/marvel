@@ -1,0 +1,43 @@
+.button {
+    width: 101px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    text-transform: uppercase;
+    background: transparent;
+    position: relative;
+    transition: 0.2s;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            cursor: pointer;
+            transform: translateY(-5px);
+        }
+    }
+
+    &_main-color {
+        border: 10px solid var(--main-color);
+        border-image: 1 url('data:image/svg+xml,\
+        <svg xmlns="http://www.w3.org/2000/svg"\
+        width="3" height="3" fill="rgb(159, 0, 19)">\
+        <polygon points="0,1 1,0 2,0 3,0 3,2 2,3 0,3 0,2"/></svg>');
+        background: var(--main-color);
+        background-clip: padding-box;
+    }
+
+    &_grey {
+        border: 10px solid rgba(92, 92, 92, 1);
+        border-image: 1 url('data:image/svg+xml,\
+        <svg xmlns="http://www.w3.org/2000/svg"\
+        width="3" height="3" fill="rgba(92, 92, 92, 1)">\
+        <polygon points="0,1 1,0 2,0 3,0 3,2 2,3 0,3 0,2"/></svg>');
+        background: rgba(92, 92, 92, 1);
+        background-clip: padding-box;
+    }
+
+    &:disabled {
+        filter: grayscale(0.5);
+    }
+}
