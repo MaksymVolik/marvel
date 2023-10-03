@@ -6,6 +6,8 @@ import {
     RouterProvider
 } from 'react-router-dom';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 import Layout from '../layouts/RootLayout';
 import ComicsLayout from '../layouts/ComicsLayout';
 // import Spinner from '../spinner/Spinner';
@@ -41,7 +43,9 @@ const router = createBrowserRouter(
 
 const App = () => {
     return (
-        <RouterProvider router={router} />
+        <HelmetProvider>
+            <RouterProvider router={router} />
+        </HelmetProvider>
     );
 }
 

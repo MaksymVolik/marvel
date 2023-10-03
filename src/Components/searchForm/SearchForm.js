@@ -11,6 +11,7 @@ const ClearMsg = (props) => {
 
     useEffect(() => {
         props.setChar(null);
+        // eslint-disable-next-line
     }, [values]);
 
     return null;
@@ -18,26 +19,27 @@ const ClearMsg = (props) => {
 
 const SearchForm = () => {
     const [char, setChar] = useState(null);
-    const { loading, error, clearError, getCharacterByName } = useMarvelService();
+    const { process, setProcess, clearError, getCharacterByName } = useMarvelService();
 
     const searchChar = (name) => {
         clearError();
         setChar(null);
 
         getCharacterByName(name)
-            .then(onCharLoaded);
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
     const onCharLoaded = (char) => {
         setChar(char);
     }
 
-    const errorMsg = error ? <div className="search__error">{error}</div> : null;
-    const spinner = loading ? <Spinner size="24px" margin='25px auto 0 auto' /> : null;
+    const errorMsg = process === 'error' ? <div className="search__error">An unexpected error occurred while searching for a character. Try again.</div> : null;
+    const spinner = process === 'loading' ? <Spinner size="24px" margin='25px auto 0 auto' /> : null;
 
     const content = !char ? null : char.length > 0 ?
         <div className="search__block">
-            <div className="search__label search__label_green">There is! Visit page?</div>
+            <div className="search__label search__label_green">There is {char[0].name}! Visit page?</div>
             <Link
                 className='search-btn button button_grey'
                 to={`/character/${char[0].id}`}
@@ -67,6 +69,7 @@ const SearchForm = () => {
                     />
                     <button
                         type="submit"
+                        disabled={process === 'loading'}
                         className='search-btn button button_main-color'>find</button>
                 </div>
                 <ErrorMessage className="search__error" name="name" component="div" />

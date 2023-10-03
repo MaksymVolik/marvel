@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+import setContent from '../../utils/setContent';
 import useMarvelService from '../../services/MarvelService';
 
 import './randomChar.scss';
 
 const RandomChar = () => {
     const [char, setChar] = useState(null);
-    const { loading, error, clearError, getCharacter } = useMarvelService();
+    const { process, setProcess, clearError, getCharacter } = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -16,6 +15,7 @@ const RandomChar = () => {
         // return () => {
         //     clearInterval(timerId);
         // }
+        // eslint-disable-next-line
     }, [])
 
     const onCharLoaded = (char) => {
@@ -26,19 +26,13 @@ const RandomChar = () => {
         clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         getCharacter(id)
-            .then(onCharLoaded);
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'));;
     }
-
-    const spinner = loading ? <Spinner /> : null;
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const view = !(loading || error || !char) ? <View char={char} /> : null;
-
 
     return (
         <div className="random-char">
-            {spinner}
-            {errorMessage}
-            {view}
+            {setContent(process, View, char)}
             <div className="rendom-char__cta-block cta-block">
                 <div className='cta-block__text'>
                     <div >Random character for today!</div>
@@ -55,8 +49,8 @@ const RandomChar = () => {
 
 }
 
-const View = ({ char }) => {
-    const { name, description, thumbnail, homepage, wiki } = char;
+const View = ({ data }) => {
+    const { name, description, thumbnail, homepage, wiki } = data;
     const imgStyle = thumbnail.lastIndexOf("image_not_available") !== -1 ? { objectFit: 'contain' } : { objectFit: 'cover' }
 
     return (

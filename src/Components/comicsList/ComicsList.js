@@ -6,22 +6,39 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './comicsList.scss';
 
+const setContent = (process, Component, newItemLoading) => {
+    switch (process) {
+        case 'initial':
+            return null;
+        case 'loading':
+            return newItemLoading ? <Component /> : <Spinner />;
+        case 'confirmed':
+            return <Component />;
+        case 'error':
+            return <ErrorMessage />;
+        default:
+            throw new Error('Unexpected process status');
+    }
+}
+
 const ComicsList = (props) => {
     const [comicsList, setComicsList] = useState([]);
     const [offset, setOffset] = useState(0);
     const [newItemLoading, setNewItemLoading] = useState(true);
     const [comicsEnded, setComicsEnded] = useState(false)
 
-    const { loading, error, getAllComics } = useMarvelService();
+    const { process, setProcess, getAllComics } = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true)
+        // eslint-disable-next-line
     }, [])
 
     const onRequest = (offset, initial) => {
         setNewItemLoading(initial ? false : true)
         getAllComics(offset)
-            .then(getComicsLoaded);
+            .then(getComicsLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
     const getComicsLoaded = (newComics) => {
@@ -32,7 +49,7 @@ const ComicsList = (props) => {
 
     }
 
-    function renderItmes(arr) {
+    function renderItems(arr) {
 
         const items = arr.map((item, i) => {
             const styleImg = item.thumbnail.lastIndexOf("image_not_available") !== -1 ? { objectFit: 'unset' } : { objectFit: 'cover' }
@@ -69,15 +86,9 @@ const ComicsList = (props) => {
         )
     }
 
-    const items = renderItmes(comicsList);
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
-    const errorMessage = error ? <ErrorMessage /> : null;
-
     return (
         <div className="comics__list">
-            {spinner}
-            {errorMessage}
-            {items}
+            {setContent(process, () => renderItems(comicsList), newItemLoading)}
             <button
                 className="comics__btn button button_main-color button_long"
                 disabled={newItemLoading}

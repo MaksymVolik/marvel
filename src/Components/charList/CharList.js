@@ -7,6 +7,21 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './charList.scss';
 
+const setContent = (process, items, newItemLoading) => {
+    switch (process) {
+        case 'initial':
+            return null;
+        case 'loading':
+            return newItemLoading ? items : <Spinner />;
+        case 'confirmed':
+            return items;
+        case 'error':
+            return <ErrorMessage />;
+        default:
+            throw new Error('Unexpected process status');
+    }
+}
+
 const CharList = (props) => {
     const [charList, setCharList] = useState([]);
     const [offset, setOffset] = useState(210);
@@ -15,49 +30,24 @@ const CharList = (props) => {
 
     const { charId, onCharSelected } = props
 
-    const { loading, error, getAllCharacters } = useMarvelService();
+    const { process, setProcess, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
         onRequest();
         window.addEventListener('scroll', onScroll);
 
-        // getLocalOffset();
-
         return () => {
             window.removeEventListener('scroll', onScroll);
         }
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         if (newItemLoading && !charEnded) {
             onRequest();
         }
+        // eslint-disable-next-line
     }, [newItemLoading])
-
-    // useEffect(() => {
-    //     console.log('write offset:' + offset);
-
-    //     localStorage.setItem('offset', offset - 9)
-    // }, [offset])
-
-    // const getLocalOffset = () => {
-    //     const local = localStorage.getItem('offset');
-
-    //     if (!local) {
-    //         return;
-    //     }
-    //     console.log('read local: ' + local);
-
-    //     let i = offset;
-
-    //     while (i < local) {
-    //         i = i + 9;
-    //         console.log(offset);
-
-    //         onRequest(i)
-    //     }
-
-    // }
 
     const onScroll = () => {
         if (window.innerHeight + window.scrollY - 100 >= document.body.offsetHeight) {
@@ -68,6 +58,7 @@ const CharList = (props) => {
     const onRequest = () => {
         getAllCharacters(offset)
             .then(onCharListLoaded)
+            .then(() => setProcess('confirmed'))
             .finally(() => setNewItemLoading(false));
     }
 
@@ -104,22 +95,21 @@ const CharList = (props) => {
         })
         return (
             <ul className="char-list__box">
-                <TransitionGroup component={null}>
+                <TransitionGroup component={null} appear>
                     {items}
                 </TransitionGroup>
             </ul>
         )
     }
 
-    const items = renderItem(charList);
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
-    const errorMessage = error ? <ErrorMessage /> : null;
+    // const element = useMemo(() => {
+    //     return setContent(process, () => renderItem(charList), newItemLoading);
+    //     // eslint-disable-next-line
+    // }, [process])
 
     return (
         <div className="char-list">
-            {spinner}
-            {errorMessage}
-            {items}
+            {setContent(process, renderItem(charList), newItemLoading)}
             <button
                 className="char-list__btn button button_main-color button_long"
                 disabled={newItemLoading}

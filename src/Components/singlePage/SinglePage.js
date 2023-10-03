@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+
+import setContent from '../../utils/setContent';
 
 import './singlePage.scss';
 
@@ -12,10 +12,11 @@ const SinglePage = (props) => {
     const { id } = useParams();
     const [item, setItem] = useState(null);
 
-    const { loading, error, clearError, getComic, getCharacter } = useMarvelService();
+    const { process, setProcess, clearError, getComic, getCharacter } = useMarvelService();
 
     useEffect(() => {
         updateItem();
+        // eslint-disable-next-line
     }, [id])
 
     const updateItem = () => {
@@ -23,10 +24,10 @@ const SinglePage = (props) => {
 
         if (props.page === 'comic') {
             getComic(id)
-                .then(onItemLoaded);
+                .then(onItemLoaded).then(() => setProcess('confirmed'));
         } else if (props.page === 'character') {
             getCharacter(id)
-                .then(onItemLoaded);
+                .then(onItemLoaded).then(() => setProcess('confirmed'));
         }
     }
 
@@ -35,27 +36,25 @@ const SinglePage = (props) => {
     }
 
     const renderPage = props.page === "comic"
-        ? <SingleComic item={item} />
+        ? SingleComic
         : props.page === "character"
-            ? <SingleChar item={item} />
+            ? SingleChar
             : null
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error || !item) ? renderPage : null;
+    // const errorMessage = error ? <ErrorMessage /> : null;
+    // const spinner = loading ? <Spinner /> : null;
+    // const content = !(loading || error || !item) ? renderPage : null;
 
     return (
         <div style={{ 'marginTop': '50px' }}>
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, renderPage, item)}
         </div>
     )
 }
 
-const SingleComic = ({ item }) => {
+const SingleComic = ({ data }) => {
     let navigate = useNavigate();
 
-    const { title, description, pageCount, thumbnail, language, price } = item;
+    const { title, description, pageCount, thumbnail, language, price } = data;
 
     return (
         <div className="single-comic">
@@ -76,8 +75,8 @@ const SingleComic = ({ item }) => {
     )
 }
 
-const SingleChar = ({ item }) => {
-    const { name, description, thumbnail } = item;
+const SingleChar = ({ data }) => {
+    const { name, description, thumbnail } = data;
 
     return (
         <div className="single-comic">

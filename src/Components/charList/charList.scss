@@ -28,11 +28,13 @@
         filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.25));
         transition: 0.2s;
 
-        &-enter {
+        &-enter,
+        &-appear {
             opacity: 0;
         }
 
-        &-enter-active {
+        &-enter-active,
+        &-appear-active {
             opacity: 1;
             transition: opacity 500ms ease-in;
         }
