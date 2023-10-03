@@ -10,6 +10,12 @@
     position: relative;
     transition: 0.2s;
 
+    &_long {
+        width: 170px;
+        height: 38px;
+        margin: 45px auto 0 auto;
+    }
+
     @media (hover: hover) and (pointer: fine) {
         &:hover {
             cursor: pointer;

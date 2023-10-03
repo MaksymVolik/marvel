@@ -1,0 +1,138 @@
+import { useState, useEffect, createRef } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import PropTypes from 'prop-types';
+import useMarvelService from '../../services/MarvelService';
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+
+import './charList.scss';
+
+const CharList = (props) => {
+    const [charList, setCharList] = useState([]);
+    const [offset, setOffset] = useState(210);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [charEnded, setCharEnded] = useState(false);
+
+    const { charId, onCharSelected } = props
+
+    const { loading, error, getAllCharacters } = useMarvelService();
+
+    useEffect(() => {
+        onRequest();
+        window.addEventListener('scroll', onScroll);
+
+        // getLocalOffset();
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (newItemLoading && !charEnded) {
+            onRequest();
+        }
+    }, [newItemLoading])
+
+    // useEffect(() => {
+    //     console.log('write offset:' + offset);
+
+    //     localStorage.setItem('offset', offset - 9)
+    // }, [offset])
+
+    // const getLocalOffset = () => {
+    //     const local = localStorage.getItem('offset');
+
+    //     if (!local) {
+    //         return;
+    //     }
+    //     console.log('read local: ' + local);
+
+    //     let i = offset;
+
+    //     while (i < local) {
+    //         i = i + 9;
+    //         console.log(offset);
+
+    //         onRequest(i)
+    //     }
+
+    // }
+
+    const onScroll = () => {
+        if (window.innerHeight + window.scrollY - 100 >= document.body.offsetHeight) {
+            setNewItemLoading(true);
+        }
+    };
+
+    const onRequest = () => {
+        getAllCharacters(offset)
+            .then(onCharListLoaded)
+            .finally(() => setNewItemLoading(false));
+    }
+
+    const onCharListLoaded = (newCharList) => {
+        setCharList(charList => [...charList, ...newCharList]);
+        setOffset(offset => offset + 9);
+        setCharEnded(newCharList.length < 9 ? true : false);
+    }
+
+    function renderItem(arr) {
+        const items = arr.map((item) => {
+            const styleImg = item.thumbnail.lastIndexOf("image_not_available") !== -1 ? { objectFit: 'unset' } : { objectFit: 'cover' }
+            const clazz = charId === item.id ? 'char-list__item_selected' : '';
+            const nodeRef = createRef(null);
+            return (
+                <CSSTransition nodeRef={nodeRef} key={item.id} timeout={500} classNames="char-list__item">
+                    <li ref={nodeRef}
+                        tabIndex={0}
+                        onClick={() => onCharSelected(item.id)}
+                        onKeyDown={e => {
+                            if (e.key === ' ' || e.key === 'Enter') {
+                                e.preventDefault();
+                                onCharSelected(item.id)
+                            }
+                        }}
+                        className={`char-list__item ${clazz}`}>
+                        <div className="char-list__image">
+                            <img style={styleImg} src={item.thumbnail} alt={item.name} />
+                        </div>
+                        <div className="char-list__name">{item.name}</div>
+                    </li>
+                </CSSTransition>
+            )
+        })
+        return (
+            <ul className="char-list__box">
+                <TransitionGroup component={null}>
+                    {items}
+                </TransitionGroup>
+            </ul>
+        )
+    }
+
+    const items = renderItem(charList);
+    const spinner = loading && !newItemLoading ? <Spinner /> : null;
+    const errorMessage = error ? <ErrorMessage /> : null;
+
+    return (
+        <div className="char-list">
+            {spinner}
+            {errorMessage}
+            {items}
+            <button
+                className="char-list__btn button button_main-color button_long"
+                disabled={newItemLoading}
+                style={{ 'display': charEnded ? 'none' : 'block' }}
+                onClick={() => setNewItemLoading(true)}
+            >LOAD MORE</button>
+        </div>
+    )
+
+}
+
+CharList.propTypes = {
+    onCharSelected: PropTypes.func.isRequired
+}
+
+export default CharList;

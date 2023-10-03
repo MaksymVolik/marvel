@@ -1,58 +1,48 @@
-import { Component } from 'react';
+// import { lazy, Suspense } from 'react';
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider
+} from 'react-router-dom';
 
-import Header from '../header/Header';
-import RandomChar from '../randomChar/RandomChar';
-// import Banner from '../banner/Banner';
-import CharList from '../сharList/СharList';
-import CharInfo from '../charInfo/CharInfo';
-// import Search from '../Search/search';
-// import Comic from '../Сomic/comic';
-import ErrorBoundary from '../errorBoundary/ErrorBoundary';
-
-import decoration from '../../resources/img/vision.png';
+import Layout from '../layouts/RootLayout';
+import ComicsLayout from '../layouts/ComicsLayout';
+// import Spinner from '../spinner/Spinner';
 
 import './app.scss';
 
-class App extends Component {
-    state = {
-        selectedChar: null
-    }
+// const MainPage = lazy(() => import('../pages/MainPage'))
+// const ComicsPage = lazy(() => import('../pages/ComicsPage'))
+// const SingleComicPage = lazy(() => import('../pages/SingleComicPage'))
+// const Page404 = lazy(() => import('../pages/404'))
 
-    onCharSelected = (id) => {
-        this.setState({
-            selectedChar: id
-        })
-    }
+// function withSuspens(Component) {
+//     return (
+//         <Suspense fallback={<Spinner />}>
+//             <Component />
+//         </Suspense>
+//     )
+// }
 
-    render() {
-        return (
-            <div className="App container">
-                <Header />
-                <main>
-                    <ErrorBoundary>
-                        <RandomChar />
-                    </ErrorBoundary>
-                    {/* <Banner /> */}
-                    <div className="App__page">
-                        <ErrorBoundary>
-                            <CharList
-                                onCharSelected={this.onCharSelected}
-                                charId={this.state.selectedChar} />
-                        </ErrorBoundary>
-                        <div className="App__descr">
-                            <ErrorBoundary>
-                                <CharInfo charId={this.state.selectedChar} />
-                            </ErrorBoundary>
-                            {/* <Search /> */}
-                        </div>
-                    </div>
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path='/' element={<Layout />}>
+            <Route index lazy={() => import('../pages/MainPage')} />
+            <Route path='comics' element={<ComicsLayout />}>
+                <Route index lazy={() => import('../pages/ComicsPage')} />
+                <Route path=':id' lazy={() => import('../pages/SingleComicPage')} />
+            </Route>
+            <Route path='character/:id' lazy={() => import('../pages/CharacterPage')} />
+            <Route path='*' lazy={() => import('../pages/404')} />
+        </Route>
+    )
+)
 
-                    <img className="bg-decoration" src={decoration} alt="vision" />
-                </main>
-
-            </div>
-        );
-    }
+const App = () => {
+    return (
+        <RouterProvider router={router} />
+    );
 }
 
 export default App;
