@@ -11,10 +11,18 @@
 - a form for searching for a character in the Marvel database with validation and subsequent transition to the page with the character;
 - a separate page with a list of comics and opening the comic page;
 
-### libraries used:
+### React:
+- react functional components;
+- hooks (useState, useEffect, useCallback, useRef, useMemo);
+- creating your own hook (useHttp);
+- navigation in the application (React Router 6);
+- SEO optimization of web applications (React-helmet);
+- working with react libraries (Formik, Yup, React Transition Group)
+- lazy loading react components;
+
+### Libraries used:
 - Formik - Build forms in React
-- Prop-types - Typechecking
 - React-helmet - managing changes in the document header
 - React Router - enables "client side routing"
 - React Transition Group - for animation of entry and exit transitions
-- yup - конструктор схем для аналізу та перевірки значення під час виконання
+- Yup - конструктор схем для аналізу та перевірки значення під час виконання
