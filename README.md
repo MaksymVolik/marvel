@@ -25,4 +25,4 @@
 - React-helmet - managing changes in the document header
 - React Router - enables "client side routing"
 - React Transition Group - for animation of entry and exit transitions
-- Yup - конструктор схем для аналізу та перевірки значення під час виконання
+- Yup - schema constructor to analyze and validate the value at runtime
